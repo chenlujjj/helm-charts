@@ -19,6 +19,13 @@
   "customManagers": [
     {
       "customType": "regex",
+      "managerFilePatterns": ["/\\.github\\/workflows\\/run-testing\\.yaml/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[^\\s]+) depName=(?<depName>[^\\s]+)\\n\\s+version: (?<currentValue>v[^\\s]+)"
+      ]
+    },
+    {
+      "customType": "regex",
       "managerFilePatterns": ["/charts\\/[^/]+\\/Chart\\.yaml/"],
       "matchStrings": [
         "# renovate: image=(?<depName>[^\\s]+)\\nappVersion: (?<currentValue>\\S+)"
@@ -30,6 +37,14 @@
       "managerFilePatterns": ["/\\.github\\/workflows\\/run-testing\\.yaml/"],
       "matchStrings": [
         "# renovate: image=(?<depName>[^\\s]+)\\n\\s+- \"(?<currentValue>v[^\"]+)\""
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)Makefile$/"],
+      "matchStrings": [
+        "# renovate: image=(?<depName>[^\\s]+)\\n(?:HELM_IMAGE|CT_IMAGE) = [^:]+:(?<currentValue>\\S+)"
       ],
       "datasourceTemplate": "docker"
     }
@@ -74,6 +89,10 @@
     {
       "description": "Only track plain vX.Y.Z releases, exclude enterprise/scratch variants",
       "matchManagers": ["custom.regex"],
+      "matchFileNames": [
+        "charts/**/Chart.yaml",
+        ".github/workflows/run-testing.yaml"
+      ],
       "allowedVersions": "/^v[0-9]+\\.[0-9]+\\.[0-9]+$/"
     },
     {
